@@ -18,7 +18,8 @@ class KategoriFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'kode_kategori' => strtoupper($this->faker->unique()->lexify('KAT-???')),
+            'nama_kategori' => $this->faker->words(2, true),
         ];
     }
 }
