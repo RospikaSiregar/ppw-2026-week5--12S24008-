@@ -16,12 +16,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $kategoris = [
+            ['kode_kategori' => 'KAT-SI', 'nama_kategori' => 'Sistem Informasi'],
+            ['kode_kategori' => 'KAT-PW', 'nama_kategori' => 'Pemrograman Web'],
+            ['kode_kategori' => 'KAT-AI', 'nama_kategori' => 'Kecerdasan Buatan'],
+            ['kode_kategori' => 'KAT-BD', 'nama_kategori' => 'Basis Data'],
+            ['kode_kategori' => 'KAT-JK', 'nama_kategori' => 'Jaringan Komputer'],
+        ];
 
-        Kategori::factory(5)->create()->each(function ($kategori) {
+        foreach ($kategoris as $kat) {
+            $kategori = Kategori::create($kat);
             Buku::factory(4)->create([
                 'kategori_id' => $kategori->id,
             ]);
-        });
+        }
     }
 }

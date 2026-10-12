@@ -15,6 +15,10 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-del shadow-sm mb-4">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{{ route('buku.index') }}">SIPUS-Del Perpustakaan</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link text-white me-3" href="{{ route('buku.index') }}">Buku</a>
+                <a class="nav-link text-white" href="{{ route('kategori.index') }}">Kategori</a>
+            </div>
         </div>
     </nav>
 

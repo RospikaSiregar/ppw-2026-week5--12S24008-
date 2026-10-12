@@ -5,16 +5,27 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * Register any application services.
+     */
     public function register(): void
     {
         //
     }
 
+    /**
+     * Bootstrap any application services.
+     */
     public function boot(): void
     {
+        // Menggunakan styling Bootstrap 5 untuk pagination bawaan Laravel
+        Paginator::useBootstrapFive();
+
+        // Audit Logging Query SQL untuk pembuktian Eager Loading
         DB::listen(function ($query) {
             Log::info(sprintf(
                 "[SQL AUDIT] (%.2f ms) %s", $query->time, $query->sql
