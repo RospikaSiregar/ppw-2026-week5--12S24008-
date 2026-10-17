@@ -28,7 +28,7 @@ class Buku extends Model
     }
 
     public function peminjamans(): HasMany
-    {
-        return $this->hasMany(Peminjaman::class);
-    }
+{
+    return $this->hasMany(Peminjaman::class);
+}
 }
