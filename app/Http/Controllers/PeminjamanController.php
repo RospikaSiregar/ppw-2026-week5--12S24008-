@@ -26,13 +26,21 @@ class PeminjamanController extends Controller
             // Generate Kode PJM unik (contoh: PJM-20261018-XXXX)
             $kodePinjam = 'PJM-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -4));
 
-            // Catat transaksi ke tabel peminjamans lengkap dengan kode_pinjam
+            // Ambil data user login atau fallback data mahasiswa Del
+            $user = Auth::user();
+            $nim  = $user->nim ?? '12S24008';
+            $nama = $user->name ?? 'Rospika Sarah';
+
+            // Catat transaksi ke tabel peminjamans lengkap sesuai skema migrasi
             Peminjaman::create([
-                'kode_pinjam'    => $kodePinjam,
-                'buku_id'        => $buku->id,
-                'user_id'        => Auth::id() ?? 1,
-                'tanggal_pinjam' => now(),
-                'status'         => 'dipinjam',
+                'kode_pinjam'          => $kodePinjam,
+                'buku_id'              => $buku->id,
+                'user_id'              => $user->id ?? 1,
+                'nim_peminjam'         => $nim,
+                'nama_peminjam'        => $nama,
+                'tanggal_pinjam'       => now()->toDateString(),
+                'tanggal_jatuh_tempo'  => now()->addDays(7)->toDateString(), // Batas pengembalian 7 hari
+                'status'               => 'dipinjam',
             ]);
 
             return back()->with('success', 'Buku "' . $buku->judul . '" berhasil dipinjam dengan kode ' . $kodePinjam . '!');
