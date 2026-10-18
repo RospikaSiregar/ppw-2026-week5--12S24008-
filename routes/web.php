@@ -32,3 +32,8 @@ Route::resource('kategori', KategoriController::class);
 // Transaksi Sirkulasi
 Route::post('/buku/{buku}/pinjam', [PeminjamanController::class, 'store'])->name('peminjaman.store');
 Route::post('/peminjaman/{id}/kembali', [PeminjamanController::class, 'returnBook'])->name('peminjaman.return');
+
+// Route Halaman Riwayat & Proses Peminjaman/Pengembalian
+Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
+Route::post('/buku/{id}/pinjam', [PeminjamanController::class, 'store'])->name('peminjaman.store');
+Route::post('/peminjaman/{id}/kembali', [PeminjamanController::class, 'kembali'])->name('peminjaman.kembali');

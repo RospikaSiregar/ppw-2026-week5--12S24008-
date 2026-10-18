@@ -7,8 +7,15 @@
 
     <!-- Alert Notifikasi Flash Session -->
     @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
             {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
@@ -35,7 +42,7 @@
             <div class="card bg-warning text-dark shadow-sm border-0">
                 <div class="card-body">
                     <h6 class="card-title">Total Peminjaman</h6>
-                    <h3 class="fw-bold mb-0">{{ $stats['total_peminjaman'] ?? 0 }}</h3>
+                    <h3 class="fw-bold mb-0">{{ $stats['total_peminjaman'] ?? $stats['total_dipinjam'] ?? 0 }}</h3>
                 </div>
             </div>
         </div>
@@ -99,7 +106,7 @@
                                 </td>
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center gap-1">
-                                        <!-- Form Pinjam Buku (Fitur Transaksi Peminjaman) -->
+                                        <!-- Form Pinjam Buku -->
                                         @if($buku->stok > 0)
                                             <form action="{{ route('peminjaman.store', $buku->id) }}" method="POST" class="d-inline">
                                                 @csrf
@@ -128,6 +135,12 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Navigasi Paginasi Halaman (Next / Previous) -->
+            <div class="d-flex justify-content-end p-3">
+                {{ $bukus->links('pagination::bootstrap-5') }}
+            </div>
+
         </div>
     </div>
 </x-layout>

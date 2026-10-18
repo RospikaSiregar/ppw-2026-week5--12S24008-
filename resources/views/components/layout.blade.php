@@ -18,6 +18,7 @@
             <div class="navbar-nav ms-auto align-items-center">
                 <a class="nav-link text-white me-3" href="{{ route('buku.index') }}">Buku</a>
                 <a class="nav-link text-white me-3" href="{{ route('kategori.index') }}">Kategori</a>
+                <a class="nav-link text-white me-3" href="{{ route('peminjaman.index') }}">Peminjaman</a>
 
                 @auth
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
