@@ -6,15 +6,46 @@ use App\Models\Buku;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
+use App\Models\Kategori;
 
 class BukuController extends Controller
 {
     // 1. Tampilkan Semua Buku (Eager Loading + Pagination)
-    public function index()
-    {
-        $bukus = Buku::with('kategori')->latest()->paginate(10);
-        return view('buku.index', compact('bukus'));
+    public function index(Request $request)
+{
+    // Simpan histori pencarian terakhir ke session
+    if ($request->filled('search')) {
+        session(['last_buku_search' => $request->search]);
     }
+
+    // Katalog Buku dengan Eager Loading, withCount, & Dynamic Search (when)
+    $bukus = Buku::with('kategori')
+        ->withCount('peminjamans')
+        ->when($request->search, function ($query, $search) {
+            return $query->where('judul', 'like', "%{$search}%")
+                ->orWhere('penulis', 'like', "%{$search}%")
+                ->orWhere('isbn', 'like', "%{$search}%");
+        })
+        ->when($request->kategori_id, function ($query, $kategoriId) {
+            return $query->where('kategori_id', $kategoriId);
+        })
+        ->latest()
+        ->paginate(10)
+        ->withQueryString();
+
+    $kategoris = Kategori::all();
+
+    // Kartu Statistik Perpustakaan menggunakan Fluent Query Builder (DB::table)
+    $stats = [
+        'total_judul' => DB::table('bukus')->count(),
+        'total_stok' => DB::table('bukus')->sum('stok'),
+        'total_dipinjam' => DB::table('peminjamans')->where('status', 'dipinjam')->count(),
+        'total_dikembalikan' => DB::table('peminjamans')->where('status', 'dikembalikan')->count(),
+    ];
+
+    return view('buku.index', compact('bukus', 'kategoris', 'stats'));
+}
 
     // 2. Form Tambah Buku
     public function create()
