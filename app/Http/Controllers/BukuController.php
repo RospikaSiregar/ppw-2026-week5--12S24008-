@@ -37,12 +37,12 @@ class BukuController extends Controller
     $kategoris = Kategori::all();
 
     // Kartu Statistik Perpustakaan menggunakan Fluent Query Builder (DB::table)
-    $stats = [
-        'total_judul' => DB::table('bukus')->count(),
-        'total_stok' => DB::table('bukus')->sum('stok'),
-        'total_dipinjam' => DB::table('peminjamans')->where('status', 'dipinjam')->count(),
-        'total_dikembalikan' => DB::table('peminjamans')->where('status', 'dikembalikan')->count(),
-    ];
+$stats = [
+    'total_judul' => DB::table('bukus')->count(),
+    'total_stok' => DB::table('bukus')->sum('stok'),
+    'total_peminjaman' => DB::table('peminjamans')->where('status', 'dipinjam')->count(),
+    'total_dikembalikan' => DB::table('peminjamans')->where('status', 'dikembalikan')->count(),
+];
 
     return view('buku.index', compact('bukus', 'kategoris', 'stats'));
 }
