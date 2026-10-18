@@ -15,9 +15,18 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-del shadow-sm mb-4">
         <div class="container">
             <a class="navbar-brand fw-bold" href="{{ route('buku.index') }}">SIPUS-Del Perpustakaan</a>
-            <div class="navbar-nav ms-auto">
+            <div class="navbar-nav ms-auto align-items-center">
                 <a class="nav-link text-white me-3" href="{{ route('buku.index') }}">Buku</a>
-                <a class="nav-link text-white" href="{{ route('kategori.index') }}">Kategori</a>
+                <a class="nav-link text-white me-3" href="{{ route('kategori.index') }}">Kategori</a>
+
+                @auth
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-outline-light">Logout</button>
+                    </form>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-sm btn-outline-light">Login Pustakawan</a>
+                @endauth
             </div>
         </div>
     </nav>
