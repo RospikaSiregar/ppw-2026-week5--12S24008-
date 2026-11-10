@@ -1,0 +1,7 @@
+# Use this workspace to collaborate
+workspace:
+  id: 5c80d991-3ff0-4371-872d-24303d917e53
+
+localResources:
+  specs:
+    - ../docs/openapi-sipus-v1.yaml
