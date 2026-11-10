@@ -54,3 +54,35 @@
    cd ppw-2026-week9-[NIM]
    git checkout week9-rest-api
    composer install
+
+---
+
+## 5. Galeri Bukti Pengujian Postman
+
+### A. Otentikasi & Penerbitan Bearer Token (Sanctum)
+![01 Login API](docs/screenshots/01-login-success.jpeg)
+*Gambar 1: Respons 200 OK otentikasi pustakawan dan penerbitan Bearer Token.*
+
+### B. Katalog Buku Terpaginasi & HATEOAS
+![02 GET Katalog Buku](docs/screenshots/02-katalog-buku.jpeg)
+*Gambar 2: Respons 200 OK katalog buku dengan paginasi data dan objek _links HATEOAS.*
+
+### C. Tambah Buku Baru (201 Created)
+![03 POST Tambah Buku](docs/screenshots/03-tambah-buku.jpeg)
+*Gambar 3: Respons 201 Created pembuatan buku baru beserta header Location.*
+
+### D. Transaksi Sirkulasi Peminjaman ACID (201 Created)
+![04 Transaksi Peminjaman](docs/screenshots/04-pinjam-buku.jpeg)
+*Gambar 4: Respons 201 Created transaksi peminjaman buku dengan locking stok atomik.*
+
+### E. Service SOAP Bebas Pustaka
+![05 SOAP Clearance](docs/screenshots/05-soap-clearance.jpeg)
+*Gambar 5: Respons 200 OK verifikasi bebas pustaka berformat XML SOAP.*
+
+### F. Penanganan Error Global RFC 7807 (404 Not Found)
+![06 Error 404 RFC7807](docs/screenshots/06-error-rfc7807.jpeg)
+*Gambar 6: Format error standar RFC 7807 (application/problem+json) saat resource tidak ditemukan.*
+
+### G. Penanganan Galat Transaksi RFC 7807 (409 Conflict)
+![07 Error 409 Conflict](docs/screenshots/07-error-409-conflict.jpeg)
+*Gambar 7: Penolakan transaksi peminjaman duplikat dengan kode status 409 Conflict.*
