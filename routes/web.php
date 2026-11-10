@@ -5,6 +5,7 @@ use App\Http\Controllers\BukuController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Soap\LibrarySoapController;
 
 // Redirect root ke /buku
 Route::get('/', function () {
@@ -37,3 +38,6 @@ Route::post('/peminjaman/{id}/kembali', [PeminjamanController::class, 'returnBoo
 Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
 Route::post('/buku/{id}/pinjam', [PeminjamanController::class, 'store'])->name('peminjaman.store');
 Route::post('/peminjaman/{id}/kembali', [PeminjamanController::class, 'kembali'])->name('peminjaman.kembali');
+
+Route::get('/soap/sipus.wsdl', [LibrarySoapController::class, 'wsdl']);
+Route::post('/soap/sipus', [LibrarySoapController::class, 'handle']);
