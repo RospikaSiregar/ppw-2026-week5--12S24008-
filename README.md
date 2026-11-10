@@ -55,6 +55,24 @@
    git checkout week9-rest-api
    composer install
 
+2. **Konfigurasi Database & Migration:**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   php artisan migrate:fresh --seed
+
+3. **Kredensial Pengujian (Pustakawan):**
+   - **Email:** `pustakawan@del.ac.id`
+   - **Password:** `password123`
+
+4. **Jalankan Server:**
+   ```bash
+   php artisan serve
+
+5. **Import Postman Collection:**
+   Buka aplikasi Postman, lalu import file koleksi dari jalur:
+   `docs/SIPUS-Del-API-v1.postman_collection.json`
+
 ---
 
 ## 5. Galeri Bukti Pengujian Postman
