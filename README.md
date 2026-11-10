@@ -1,58 +1,56 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laporan Praktikum Minggu 9 - SIPUS-Del (Backend Tahap 3: REST API & SOAP Web Services)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 1. Identitas Mahasiswa
+- **Nama:** Rospika Sarah Yosefin Siregar
+- **NIM:** 12S24008
+- **Program Studi:** S1 Sistem Informasi
+- **Mata Kuliah:** Pemrograman dan Pengujian Aplikasi Web (1253101)
+- **Repositori:** `ppw-2026-week9-12S24008`
+- **Branch:** `week9-rest-api`
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 2. Analisis Kebutuhan & Kelayakan Web Services
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Peran Sistem pada SIPUS-Del:
+1. **Service Provider (REST API):** Menyediakan katalog buku terpaginasi (`/api/v1/bukus`) dan transaksi peminjaman sirkulasi (`/api/v1/peminjamans`) untuk konsumsi aplikasi web/mobile.
+2. **Service Consumer (REST API):** Mengonsumsi OpenLibrary API (`https://openlibrary.org/api/books`) via Laravel `Http` Facade untuk pengayaan metadata buku eksternal.
+3. **Legacy Provider (SOAP Web Service):** Menyajikan endpoint WSDL (`/soap/sipus`) untuk pemeriksaan bebas pustaka sebagai syarat yudisium mahasiswa.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Matriks Komparasi SOAP vs REST:
+| Aspek Pembanding | SOAP Service (`/soap/sipus`) | REST API (`/api/v1/*`) |
+| :--- | :--- | :--- |
+| **Format Payload** | Wajib XML (`<soap:Envelope>`) | JSON (`application/json`) |
+| **Kontrak Layanan** | Formal WSDL Schema (`.wsdl`) | OpenAPI 3.0 Specification (`.yaml`) |
+| **Otentikasi** | Header XML / Custom | Stateless Bearer Token (Laravel Sanctum) |
+| **Pesan Galat** | XML `<soap:Fault>` | Standard RFC 7807 (`application/problem+json`) |
+| **Karakteristik & Use-case** | Integrasi sistem enterprise legacy (Bebas Pustaka) | Layanan modern high-performance (Katalog & Sirkulasi) |
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 3. Katalog Endpoint Web Services
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Metode | URI Endpoint | Otentikasi | Deskripsi / Fungsi Bisnis | Status Ekspektasi |
+| :--- | :--- | :--- | :--- | :--- |
+| `GET` | `/soap/sipus.wsdl` | Publik | Dokumen kontrak WSDL SOAP Bebas Pustaka | `200 OK` |
+| `POST` | `/soap/sipus` | Publik | Verifikasi status bebas pustaka peminjam | `200 OK` / `500 Fault` |
+| `POST` | `/api/v1/auth/login` | Publik | Otentikasi Pustakawan & Penerbitan Bearer Token | `200 OK` / `401` |
+| `GET` | `/api/v1/auth/me` | Bearer Token | Profil akun pemilik token aktif | `200 OK` / `401` |
+| `POST` | `/api/v1/auth/logout` | Bearer Token | Mencabut token otentikasi aktif | `200 OK` / `401` |
+| `GET` | `/api/v1/bukus` | Publik | Katalog buku terpaginasi dengan tautan HATEOAS | `200 OK` |
+| `POST` | `/api/v1/bukus` | Bearer Token | Menambah buku baru (Return Header `Location`) | `201 Created` / `422` |
+| `PUT` | `/api/v1/bukus/{id}` | Bearer Token | Pembaruan utuh atribut buku (Full Replacement) | `200 OK` / `404` |
+| `PATCH` | `/api/v1/bukus/{id}` | Bearer Token | Pembaruan parsial atribut buku | `200 OK` / `400` |
+| `DELETE` | `/api/v1/bukus/{id}` | Bearer Token | Menghapus data buku | `204 No Content` / `409` |
+| `POST` | `/api/v1/peminjamans` | Bearer Token | Transaksi peminjaman ACID (`lockForUpdate`) | `201 Created` / `409` |
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 4. Panduan Instalasi & Pengujian Lokal
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
-```
-
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. **Clone & Setup Environment:**
+   ```bash
+   git clone [https://github.com/](https://github.com/)[username]/ppw-2026-week9-[NIM].git
+   cd ppw-2026-week9-[NIM]
+   git checkout week9-rest-api
+   composer install
