@@ -15,6 +15,7 @@ class BukuResource extends JsonResource
             'judul' => $this->judul,
             'penulis' => $this->penulis,
             'penerbit' => $this->penerbit,
+            'tahun_terbit' => $this->tahun_terbit,
             'isbn' => $this->isbn,
             'stok' => $this->stok,
             'created_at' => $this->created_at?->toIso8601String(),

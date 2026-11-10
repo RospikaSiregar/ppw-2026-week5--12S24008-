@@ -74,6 +74,7 @@ class BukuApiController extends Controller
             'judul' => 'required|string|max:255',
             'penulis' => 'required|string|max:255',
             'penerbit' => 'required|string|max:255',
+            'tahun_terbit' => 'required|integer|digits:4',
             'isbn' => 'required|string|unique:bukus,isbn',
             'stok' => 'required|integer|min:0',
         ]);

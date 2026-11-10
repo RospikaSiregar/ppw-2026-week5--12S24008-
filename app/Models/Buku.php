@@ -18,6 +18,7 @@ class Buku extends Model
         'judul',
         'penulis',
         'penerbit',
+        'tahun_terbit',
         'isbn',
         'stok',
     ];
